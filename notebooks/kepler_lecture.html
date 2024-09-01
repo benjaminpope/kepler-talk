@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.53">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Interactive Data Analysis with Kepler/K2 and TESS</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="kepler_lecture_files/libs/clipboard/clipboard.min.js"></script>
+<script src="kepler_lecture_files/libs/quarto-html/quarto.js"></script>
+<script src="kepler_lecture_files/libs/quarto-html/popper.min.js"></script>
+<script src="kepler_lecture_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="kepler_lecture_files/libs/quarto-html/anchor.min.js"></script>
+<link href="kepler_lecture_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="kepler_lecture_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="kepler_lecture_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="kepler_lecture_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="kepler_lecture_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Interactive Data Analysis with Kepler/K2 and TESS</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p><strong>Benjamin Pope</strong></p>
+<p><em>University of Queensland</em></p>
+<!-- <img src="qrcode_mcmc.png" alt="QR Code" style="width: 300px; display:block; margin:auto"/> -->
+<!-- todo: insert correct QR code here -->
+<div id="cell-3" class="cell" data-editable="true" data-slideshow="{&quot;slide_type&quot;:&quot;fragment&quot;}" data-tags="[]" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># This is going to be an interactive lecture using Jupyter! </span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># So let's import things!</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np </span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> lightkurve</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> k2sc</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> astropy.timeseries <span class="im">import</span> LombScargle, BoxLeastSquares</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> astropy.units <span class="im">as</span> u</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> warnings<span class="op">;</span> warnings.simplefilter(<span class="st">'ignore'</span>)</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>matplotlib inline</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="kepler-data" class="level1">
+<h1>Kepler data</h1>
+<p>The Kepler Space Telescope revolutionised exoplanetary science by providing high-precision photometry of hundreds of thousands of stars. The data is publicly available and has been used to discover thousands of exoplanets.</p>
+<p>While the mission science team originally aimed to keep their data proprietary and analyse it in-house, after a brief period they pivoted to an open-source model with data hosted on (MAST)[https://archive.stsci.edu/kepler/], and many teams developed open-source software to analyse the data. This is what I did my DPhil on!</p>
+<!-- <img src="hubble.png" alt="Hubble's Data" style="width: 500px;"/> -->
+<p>We’re going to interactively explore data from Kepler to see how we would discover planets, stellar variability, and correct for instrumental systematics.</p>
+<div id="cell-6" class="cell" data-editable="true" data-slideshow="{&quot;slide_type&quot;:&quot;subslide&quot;}" data-tags="[]" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># download Kepler-10 data</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>target <span class="op">=</span> <span class="st">'Kepler-10'</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>search <span class="op">=</span> lightkurve.search_targetpixelfile(target,exptime<span class="op">=</span><span class="dv">60</span>) <span class="co"># get 1 minute cadence data</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>search </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="2">
+SearchResult containing 34 data products.
+
+<table id="table11172527792">
+<thead><tr><th>#</th><th>mission</th><th>year</th><th>author</th><th>exptime</th><th>target_name</th><th>distance</th></tr></thead>
+<thead><tr><th></th><th></th><th></th><th></th><th>s</th><th></th><th>arcsec</th></tr></thead>
+<tbody><tr><td>0</td><td>Kepler Quarter 02</td><td>2009</td><td><a href="https://archive.stsci.edu/kepler/data_products.html">Kepler</a></td><td>60</td><td>kplr011904151</td><td>0.0</td></tr>
+<tr><td>1</td><td>Kepler Quarter 03</td><td>2009</td><td><a href="https://archive.stsci.edu/kepler/data_products.html">Kepler</a></td><td>60</td><td>kplr011904151</td><td>0.0</td></tr>
+<tr><td>2</td><td>Kepler Quarter 03</td><td>2009</td><td><a href="https://archive.stsci.edu/kepler/data_products.html">Kepler</a></td><td>60</td><td>kplr011904151</td><td>0.0</td></tr>
+<tr><td>3</td><td>Kepler Quarter 03</td><td>2009</td><td><a href="https://archive.stsci.edu/kepler/data_products.html">Kepler</a></td><td>60</td><td>kplr011904151</td><td>0.0</td></tr>
+<tr><td>4</td><td>Kepler Quarter 04</td><td>2010</td><td><a href="https://archive.stsci.edu/kepler/data_products.html">Kepler</a></td><td>60</td><td>kplr011904151</td><td>0.0</td></tr>
+<tr><td>5</td><td>Kepler Quarter 05</td><td>2010</td><td><a href="https://archive.stsci.edu/kepler/data_products.html">Kepler</a></td><td>60</td><td>kplr011904151</td><td>0.0</td></tr>
+<tr><td>6</td><td>Kepler Quarter 05</td><td>2010</td><td><a href="https://archive.stsci.edu/kepler/data_products.html">Kepler</a></td><td>60</td><td>kplr011904151</td><td>0.0</td></tr>
+<tr><td>7</td><td>Kepler Quarter 05</td><td>2010</td><td><a href="https://archive.stsci.edu/kepler/data_products.html">Kepler</a></td><td>60</td><td>kplr011904151</td><td>0.0</td></tr>
+<tr><td>8</td><td>Kepler Quarter 06</td><td>2010</td><td><a href="https://archive.stsci.edu/kepler/data_products.html">Kepler</a></td><td>60</td><td>kplr011904151</td><td>0.0</td></tr>
+<tr><td>9</td><td>Kepler Quarter 06</td><td>2010</td><td><a href="https://archive.stsci.edu/kepler/data_products.html">Kepler</a></td><td>60</td><td>kplr011904151</td><td>0.0</td></tr>
+<tr><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td></tr>
+<tr><td>24</td><td>Kepler Quarter 13</td><td>2012</td><td><a href="https://archive.stsci.edu/kepler/data_products.html">Kepler</a></td><td>60</td><td>kplr011904151</td><td>0.0</td></tr>
+<tr><td>25</td><td>Kepler Quarter 13</td><td>2012</td><td><a href="https://archive.stsci.edu/kepler/data_products.html">Kepler</a></td><td>60</td><td>kplr011904151</td><td>0.0</td></tr>
+<tr><td>26</td><td>Kepler Quarter 14</td><td>2012</td><td><a href="https://archive.stsci.edu/kepler/data_products.html">Kepler</a></td><td>60</td><td>kplr011904151</td><td>0.0</td></tr>
+<tr><td>27</td><td>Kepler Quarter 14</td><td>2012</td><td><a href="https://archive.stsci.edu/kepler/data_products.html">Kepler</a></td><td>60</td><td>kplr011904151</td><td>0.0</td></tr>
+<tr><td>28</td><td>Kepler Quarter 14</td><td>2012</td><td><a href="https://archive.stsci.edu/kepler/data_products.html">Kepler</a></td><td>60</td><td>kplr011904151</td><td>0.0</td></tr>
+<tr><td>29</td><td>Kepler Quarter 15</td><td>2012</td><td><a href="https://archive.stsci.edu/kepler/data_products.html">Kepler</a></td><td>60</td><td>kplr011904151</td><td>0.0</td></tr>
+<tr><td>30</td><td>Kepler Quarter 15</td><td>2012</td><td><a href="https://archive.stsci.edu/kepler/data_products.html">Kepler</a></td><td>60</td><td>kplr011904151</td><td>0.0</td></tr>
+<tr><td>31</td><td>Kepler Quarter 15</td><td>2013</td><td><a href="https://archive.stsci.edu/kepler/data_products.html">Kepler</a></td><td>60</td><td>kplr011904151</td><td>0.0</td></tr>
+<tr><td>32</td><td>Kepler Quarter 17</td><td>2013</td><td><a href="https://archive.stsci.edu/kepler/data_products.html">Kepler</a></td><td>60</td><td>kplr011904151</td><td>0.0</td></tr>
+<tr><td>33</td><td>Kepler Quarter 17</td><td>2013</td><td><a href="https://archive.stsci.edu/kepler/data_products.html">Kepler</a></td><td>60</td><td>kplr011904151</td><td>0.0</td></tr>
+</tbody></table>
+Length = 34 rows
+</div>
+</div>
+<div id="cell-7" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>tpf <span class="op">=</span> search[<span class="dv">1</span>].download()</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>tpf.plot()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="kepler_lecture_files/figure-html/cell-4-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Cool! We can make this into a light curve the simplest way possible: define a pixel mask, and sum the flux in the pixels.</p>
+<p>Let’s use the default mask from the pipeline.</p>
+<div id="cell-9" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>tpf.plot(aperture_mask <span class="op">=</span> <span class="st">'pipeline'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="kepler_lecture_files/figure-html/cell-5-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="cell-10" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># let's sum this to make a lightcurve</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>lc <span class="op">=</span> tpf.to_lightcurve(aperture_mask <span class="op">=</span> <span class="st">'pipeline'</span>).normalize().remove_nans()</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>lc <span class="op">=</span> lc[lc.quality<span class="op">==</span><span class="dv">0</span>]</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>lc.scatter()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="kepler_lecture_files/figure-html/cell-6-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="cell-11" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># what about that long-term trend?</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>flat <span class="op">=</span> lc.flatten(window_length<span class="op">=</span><span class="dv">2</span><span class="op">*</span><span class="dv">24</span><span class="op">*</span><span class="dv">60</span><span class="op">+</span><span class="dv">1</span>).remove_outliers(sigma_upper<span class="op">=</span><span class="dv">3</span>,sigma_lower<span class="op">=</span><span class="dv">100</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>flat.plot()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="kepler_lecture_files/figure-html/cell-7-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="cell-12" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>our_lc <span class="op">=</span> flat.<span class="bu">bin</span>(<span class="fl">0.25</span><span class="op">*</span>u.hour).remove_nans()</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>our_lc.plot()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="kepler_lecture_files/figure-html/cell-8-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="cell-13" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># box-least-squares fits a periodic signal of dips to the light curve</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>bls <span class="op">=</span> BoxLeastSquares(our_lc.time, our_lc.flux, dy<span class="op">=</span>our_lc.flux_err)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>periods <span class="op">=</span> np.linspace(<span class="fl">0.3</span>, <span class="fl">1.5</span>, <span class="dv">1000</span>)<span class="op">*</span>u.day</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>durations <span class="op">=</span> np.linspace(<span class="fl">0.05</span>, <span class="fl">0.2</span>, <span class="dv">10</span>)<span class="op">*</span>u.day</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>periodogram <span class="op">=</span> bls.power(periods, durations)</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>best_period <span class="op">=</span> periods[np.argmax(periodogram.depth_snr.value)]</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>best_duration <span class="op">=</span> periodogram.duration[np.argmax(periodogram.depth_snr.value)]</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>best_depth <span class="op">=</span> periodogram.depth[np.argmax(periodogram.depth_snr.value)]</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>t0 <span class="op">=</span> periodogram.transit_time[np.argmax(periodogram.depth_snr.value)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-14" class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>periodogram.keys()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="9">
+<pre><code>dict_keys(['objective', 'period', 'power', 'depth', 'depth_err', 'duration', 'transit_time', 'depth_snr', 'log_likelihood'])</code></pre>
+</div>
+</div>
+<div id="cell-15" class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>plt.plot(periodogram.period.value,periodogram.depth_snr.value)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Period [days]'</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Signal-to-noise'</span>)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>plt.xlim(periods.<span class="bu">min</span>().value, periods.<span class="bu">max</span>().value)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>plt.axvline(best_period.value, color<span class="op">=</span><span class="st">'red'</span>, linestyle<span class="op">=</span><span class="st">'dashed'</span>)</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>plt.text(best_period.value<span class="op">+</span><span class="fl">0.05</span>, np.<span class="bu">max</span>(periodogram.depth_snr.value), <span class="ss">f'Best period: </span><span class="sc">{</span>best_period<span class="sc">.</span>value<span class="sc">:.4g}</span><span class="ss"> days'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="10">
+<pre><code>Text(0.8869369369369369, 40.83467531875844, 'Best period: 0.8369 days')</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="kepler_lecture_files/figure-html/cell-11-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="cell-16" class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># what does that model look like?</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> bls.model(our_lc.time, best_period, best_duration, t0)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>plt.plot(our_lc.time.value, our_lc.flux.value)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>plt.plot(our_lc.time.value, model, color<span class="op">=</span><span class="st">'red'</span>, lw<span class="op">=</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="kepler_lecture_files/figure-html/cell-12-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="cell-17" class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># fold it</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>folded_lc <span class="op">=</span> our_lc.fold(period<span class="op">=</span>best_period, t0<span class="op">=</span>t0)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>folded_times <span class="op">=</span> our_lc.time.value <span class="op">%</span> best_period.value</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>folded_args <span class="op">=</span> np.argsort(folded_times)</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>plt.plot(folded_times[folded_args],our_lc.flux.value[folded_args]<span class="op">-</span><span class="dv">1</span>,<span class="st">'.k'</span>)</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>plt.plot(folded_times[folded_args],model[folded_args]<span class="op">-</span><span class="dv">1</span>,color<span class="op">=</span><span class="st">'C3'</span>,lw<span class="op">=</span><span class="dv">4</span>)</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>plt.xlim(<span class="dv">0</span>, best_period.value)</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>plt.text(<span class="fl">0.35</span>, <span class="op">-</span>best_depth<span class="op">*</span><span class="dv">2</span>, <span class="ss">f'Best Depth: </span><span class="sc">{</span>best_depth<span class="op">*</span><span class="fl">1e6</span><span class="sc">:.0f}</span><span class="ss"> ppm'</span>,color<span class="op">=</span><span class="st">'C3'</span>,fontdict<span class="op">=</span>{<span class="st">'size'</span>:<span class="dv">14</span>,<span class="st">'weight'</span>:<span class="st">'bold'</span>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="12">
+<pre><code>Text(0.35, -0.00031383340219341395, 'Best Depth: 157 ppm')</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="kepler_lecture_files/figure-html/cell-13-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="cell-18" class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># what is Rp/Rs?</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f'Rp/R* =  </span><span class="sc">{</span>(best_depth.value)<span class="op">**</span><span class="fl">0.5</span> <span class="op">*</span> <span class="dv">100</span><span class="sc">:.2f}</span><span class="ss"> %'</span>)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Earth for comparison is 0.00916794</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f'Earth/Sun Radius =  </span><span class="sc">{</span><span class="fl">0.00916794</span> <span class="op">*</span> <span class="dv">100</span><span class="sc">:.2f}</span><span class="ss"> %'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rp/R* =  1.25 %
+Earth/Sun Radius =  0.92 %</code></pre>
+</div>
+</div>
+<p>Now let’s look at how it was in K2: where the systematics are terrible! Let’s look at my favourite star, EPIC 212521166.</p>
+<div id="cell-20" class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>k2target <span class="op">=</span> <span class="st">'EPIC 212521166'</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>search <span class="op">=</span> lightkurve.search_lightcurvefile(k2target)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>search</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="14">
+SearchResult containing 8 data products.
+
+<table id="table11666690384">
+<thead><tr><th>#</th><th>mission</th><th>year</th><th>author</th><th>exptime</th><th>target_name</th><th>distance</th></tr></thead>
+<thead><tr><th></th><th></th><th></th><th></th><th>s</th><th></th><th>arcsec</th></tr></thead>
+<tbody><tr><td>0</td><td>K2 Campaign 06</td><td>2015</td><td><a href="https://archive.stsci.edu/k2/data_products.html">K2</a></td><td>1800</td><td>ktwo212521166</td><td>0.0</td></tr>
+<tr><td>1</td><td>K2 Campaign 06</td><td>2015</td><td><a href="https://archive.stsci.edu/hlsp/everest">EVEREST</a></td><td>1800</td><td>ktwo212521166</td><td>0.0</td></tr>
+<tr><td>2</td><td>K2 Campaign 06</td><td>2015</td><td>K2SC</td><td>1800</td><td>ktwo212521166</td><td>0.0</td></tr>
+<tr><td>3</td><td>K2 Campaign 06</td><td>2015</td><td><a href="https://archive.stsci.edu/hlsp/k2sff">K2SFF</a></td><td>1800</td><td>ktwo212521166</td><td>0.0</td></tr>
+<tr><td>4</td><td>K2 Campaign 17</td><td>2018</td><td><a href="https://archive.stsci.edu/k2/data_products.html">K2</a></td><td>60</td><td>ktwo212521166</td><td>0.0</td></tr>
+<tr><td>5</td><td>K2 Campaign 17</td><td>2018</td><td><a href="https://archive.stsci.edu/k2/data_products.html">K2</a></td><td>1800</td><td>ktwo212521166</td><td>0.0</td></tr>
+<tr><td>6</td><td>K2 Campaign 17</td><td>2018</td><td><a href="https://archive.stsci.edu/hlsp/everest">EVEREST</a></td><td>1800</td><td>ktwo212521166</td><td>0.0</td></tr>
+<tr><td>7</td><td>K2 Campaign 17</td><td>2018</td><td><a href="https://archive.stsci.edu/hlsp/k2sff">K2SFF</a></td><td>1800</td><td>ktwo212521166</td><td>0.0</td></tr>
+</tbody></table>
+</div>
+</div>
+<div id="cell-21" class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>lc <span class="op">=</span> search.download().PDCSAP_FLUX.normalize().remove_nans()</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>lc <span class="op">=</span> lc[lc.quality<span class="op">==</span><span class="dv">0</span>]</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>lc.scatter()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="kepler_lecture_files/figure-html/cell-16-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Look at all those transits! But also look how it has a long-term variation, which is probably stellar, and a short term variation from the 6-hour pointing jitter of K2. We’re going to correct for this by <em>detrending</em> with a Gaussian process.</p>
+<div id="cell-23" class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>x, y <span class="op">=</span> lc.pos_corr1, lc.pos_corr2</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>fig, (ax1, ax2) <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">4</span>))</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>ax1.plot(lc.time.value, x, <span class="st">'k.'</span>, markersize<span class="op">=</span><span class="dv">3</span>)</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>ax1.plot(lc.time.value, y, <span class="st">'r.'</span>, markersize<span class="op">=</span><span class="dv">3</span>)</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>ax1.set_xlabel(<span class="st">'Time (BJD)'</span>)</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>ax1.set_ylabel(<span class="st">'Position'</span>)</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>ax1.legend([<span class="st">'X'</span>, <span class="st">'Y'</span>])</span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>ax2.plot(x, y, <span class="st">'.k'</span>, markersize<span class="op">=</span><span class="dv">3</span>)</span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>ax2.set_xlabel(<span class="st">'X'</span>)</span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>ax2.set_ylabel(<span class="st">'Y'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="17">
+<pre><code>Text(0, 0.5, 'Y')</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="kepler_lecture_files/figure-html/cell-17-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="cell-24" class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> k2sc.standalone <span class="im">import</span> k2sc_lc</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>lc.__class__ <span class="op">=</span> k2sc_lc</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>lc.k2sc()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>/Users/benpope/opt/anaconda3/envs/lk/lib/python3.10/site-packages/k2sc/standalone.py:293: LightkurveDeprecationWarning: The hdu function is deprecated and may be removed in a future version.
+        Use fits.open(lc.filename) instead.
+  primary_header = self.hdu[0].header
+/Users/benpope/opt/anaconda3/envs/lk/lib/python3.10/site-packages/k2sc/standalone.py:293: ResourceWarning: unclosed file &lt;_io.BufferedReader name='/Users/benpope/.lightkurve-cache/mastDownload/K2/ktwo212521166-c06_lc/ktwo212521166-c06_llc.fits'&gt;
+  primary_header = self.hdu[0].header
+/Users/benpope/opt/anaconda3/envs/lk/lib/python3.10/site-packages/k2sc/standalone.py:294: LightkurveDeprecationWarning: The hdu function is deprecated and may be removed in a future version.
+        Use fits.open(lc.filename) instead.
+  data_header = self.hdu[1].header
+/Users/benpope/opt/anaconda3/envs/lk/lib/python3.10/site-packages/k2sc/standalone.py:294: ResourceWarning: unclosed file &lt;_io.BufferedReader name='/Users/benpope/.lightkurve-cache/mastDownload/K2/ktwo212521166-c06_lc/ktwo212521166-c06_llc.fits'&gt;
+  data_header = self.hdu[1].header
+/Users/benpope/opt/anaconda3/envs/lk/lib/python3.10/site-packages/k2sc/dtdata.py:63: DeprecationWarning: `np.int` is a deprecated alias for the builtin `int`. To silence this warning, use `int` by itself. Doing this will not modify any behavior and is safe. When replacing `np.int`, you may wish to use e.g. `np.int64` or `np.int32` to specify the precision. If you wish to review your current use, check the release note link for additional information.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  bstarts = np.full(nblocks, -bspan, np.int)   ## Starting indices for blocks
+/Users/benpope/opt/anaconda3/envs/lk/lib/python3.10/site-packages/k2sc/dtdata.py:17: DeprecationWarning: `np.bool` is a deprecated alias for the builtin `bool`. To silence this warning, use `bool` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.bool_` here.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  self._mask   = array(mask) if mask is not None else ones(self._flux.size, np.bool)
+/Users/benpope/opt/anaconda3/envs/lk/lib/python3.10/site-packages/k2sc/gp.py:98: DeprecationWarning: `np.bool` is a deprecated alias for the builtin `bool`. To silence this warning, use `bool` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.bool_` here.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  mask = zeros((t1.size,t2.size), np.bool)</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Using default splits [2390, 2428] for campaign 6
+Starting initial outlier detection
+  Flagged 34 ( 1.0%) outliers.
+Starting Lomb-Scargle period search
+  Using SqrExp position kernel
+  Found periodicity p =   14.79 (fap 1.7550e-190 &lt; 1e-50), will use a quasiperiodic kernel
+Starting global hyperparameter optimisation using DE</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>  0%|          | 0/150 [00:00&lt;?, ?it/s]/Users/benpope/opt/anaconda3/envs/lk/lib/python3.10/site-packages/k2sc/de.py:85: DeprecationWarning: `np.int` is a deprecated alias for the builtin `int`. To silence this warning, use `int` by itself. Doing this will not modify any behavior and is safe. When replacing `np.int`, you may wish to use e.g. `np.int64` or `np.int32` to specify the precision. If you wish to review your current use, check the release note link for additional information.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  t = np.zeros(3, np.int)
+ 68%|██████▊   | 102/150 [04:57&lt;02:19,  2.91s/it, -ln(L)=-6018.5]
+/Users/benpope/opt/anaconda3/envs/lk/lib/python3.10/site-packages/k2sc/gp.py:98: DeprecationWarning: `np.bool` is a deprecated alias for the builtin `bool`. To silence this warning, use `bool` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.bool_` here.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  mask = zeros((t1.size,t2.size), np.bool)</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  DE finished in 297 seconds
+  DE minimum found at: [-5.997e+00  9.718e-01  1.254e+01  6.013e-03 -5.528e+00  6.708e+00  2.518e+01 -4.039e+00]
+  DE -ln(L) -6018.5
+Starting local hyperparameter optimisation
+  Local minimum found at: [-6.000e+00  9.701e-01  1.247e+01  5.981e-03 -5.584e+00  6.384e+00
+  2.633e+01 -4.039e+00]</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>/Users/benpope/opt/anaconda3/envs/lk/lib/python3.10/site-packages/k2sc/gp.py:98: DeprecationWarning: `np.bool` is a deprecated alias for the builtin `bool`. To silence this warning, use `bool` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.bool_` here.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  mask = zeros((t1.size,t2.size), np.bool)</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Starting final outlier detection
+      8 too high
+     31 too low
+      0 not finite
+Computing time and position trends
+  CDPP - raw - 59.783
+  CDPP - position component removed - 25.251
+  CDPP - full reduction - 25.247
+Detrending time 303.0227539539337</code></pre>
+</div>
+</div>
+<div id="cell-25" class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>fig, (ax1, ax2) <span class="op">=</span> plt.subplots(<span class="dv">1</span>,<span class="dv">2</span>, figsize<span class="op">=</span>(<span class="fl">12.0</span>,<span class="fl">4.0</span>))</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>detrended <span class="op">=</span> lc.corr_flux<span class="op">-</span>lc.tr_time <span class="op">+</span> np.nanmedian(lc.tr_time)</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>ax1.plot(lc.time.value,lc.flux.value,<span class="st">'.'</span>,label<span class="op">=</span><span class="st">"Uncorrected"</span>)</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>ax1.plot(lc.time.value,detrended.value,<span class="st">'.'</span>,label<span class="op">=</span><span class="st">"K2SC"</span>)</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>ax1.set_xlabel(<span class="st">'BJD'</span>)</span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>ax1.set_ylabel(<span class="st">'Flux'</span>)</span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>im <span class="op">=</span> ax2.scatter(x,y,c<span class="op">=</span>lc.tr_position<span class="op">-</span><span class="dv">1</span>,cmap<span class="op">=</span><span class="st">'coolwarm'</span>,s<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>ax2.set_xlabel(<span class="st">'X'</span>)</span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>ax2.set_ylabel(<span class="st">'Y'</span>)</span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a>ax2.set_title(<span class="st">'Systematics Model'</span>)</span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a>plt.colorbar(im,label<span class="op">=</span><span class="st">'GP Correction'</span>)</span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a><span class="co"># plt.xlabel('BJD')</span></span>
+<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a><span class="co"># plt.ylabel('Flux')</span></span>
+<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a><span class="co"># plt.title('K2-110b',y=1.01)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-26" class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># search the detrended light curve for transits</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>bls <span class="op">=</span> BoxLeastSquares(lc.time, detrended, dy<span class="op">=</span>lc.flux_err)</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>periods <span class="op">=</span> np.linspace(<span class="dv">5</span>, <span class="dv">20</span>, <span class="dv">1000</span>)<span class="op">*</span>u.day</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>durations <span class="op">=</span> np.linspace(<span class="fl">0.05</span>, <span class="fl">0.2</span>, <span class="dv">10</span>)<span class="op">*</span>u.day</span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>periodogram <span class="op">=</span> bls.power(periods, durations)</span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>best_period <span class="op">=</span> periods[np.argmax(periodogram.depth_snr.value)]</span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>best_duration <span class="op">=</span> periodogram.duration[np.argmax(periodogram.depth_snr.value)]</span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>best_depth <span class="op">=</span> periodogram.depth[np.argmax(periodogram.depth_snr.value)]</span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a>t0 <span class="op">=</span> periodogram.transit_time[np.argmax(periodogram.depth_snr.value)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-27" class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>plt.plot(periodogram.period.value,periodogram.depth_snr.value)</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Period [days]'</span>) </span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Signal-to-noise'</span>)</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>plt.xlim(periods.<span class="bu">min</span>().value, periods.<span class="bu">max</span>().value)</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>plt.axvline(best_period.value, color<span class="op">=</span><span class="st">'red'</span>, linestyle<span class="op">=</span><span class="st">'dashed'</span>)</span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>plt.text(best_period.value<span class="op">+</span><span class="fl">0.1</span>, np.<span class="bu">max</span>(periodogram.depth_snr.value), <span class="ss">f'Best period: </span><span class="sc">{</span>best_period<span class="sc">.</span>value<span class="sc">:.4g}</span><span class="ss"> d'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="21">
+<pre><code>Text(13.958858858858859, 125.15465250327411, 'Best period: 13.86 d')</code></pre>
+</div>
+</div>
+<div id="cell-28" class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># what does the model look like?</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> bls.model(lc.time, best_period, best_duration, t0)</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>plt.plot(lc.time.value, detrended.value)</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>plt.plot(lc.time.value, model, color<span class="op">=</span><span class="st">'red'</span>, lw<span class="op">=</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-29" class="cell" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># folded</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>folded_lc <span class="op">=</span> lc.fold(period<span class="op">=</span>best_period, t0<span class="op">=</span>t0)</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>folded_times <span class="op">=</span> lc.time.value <span class="op">%</span> best_period.value</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>folded_args <span class="op">=</span> np.argsort(folded_times)</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>plt.plot(folded_times[folded_args],detrended.value[folded_args]<span class="op">-</span><span class="dv">1</span>,<span class="st">'.k'</span>)</span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>plt.plot(folded_times[folded_args],model[folded_args]<span class="op">-</span><span class="dv">1</span>,color<span class="op">=</span><span class="st">'C3'</span>,lw<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>plt.xlim(<span class="dv">2</span>,<span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>/Users/benpope/opt/anaconda3/envs/lk/lib/python3.10/site-packages/astropy/utils/decorators.py:546: LightkurveDeprecationWarning: "t0" was deprecated in version 2.0 and will be removed in a future version. Use argument "epoch_time" instead.
+  return function(*args, **kwargs)</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="23">
+<pre><code>(2.0, 4.0)</code></pre>
+</div>
+</div>
+<p>How did we do this in the paper?</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="epic212521166.jpeg" class="img-fluid figure-img"></p>
+<figcaption>EPIC 212521166</figcaption>
+</figure>
+</div>
+<p><img src="epic212521166.jpg" class="img-fluid"></p>
+<p>Now let’s look at one last dataset - some asteroseismology data from TESS. Let’s look at the Northern Star - Polaris. “As constant as the Northern Star” - but is it really?</p>
+<div id="cell-34" class="cell" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>starname <span class="op">=</span> <span class="st">'Polaris'</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>search <span class="op">=</span> lightkurve.search_lightcurvefile(starname,mission<span class="op">=</span><span class="st">'TESS'</span>,exptime<span class="op">=</span><span class="dv">120</span>)</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>search</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>/var/folders/vx/lm_q_1ld7c13_fbqfscs9n4w0000gq/T/ipykernel_99792/1715134361.py:3: LightkurveDeprecationWarning: The search_lightcurvefile function is deprecated and may be removed in a future version.
+        Use search_lightcurve() instead.
+  search = lightkurve.search_lightcurvefile(starname,mission='TESS',exptime=120)</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="24">
+SearchResult containing 2 data products.
+
+<table id="table11672227600">
+<thead><tr><th>#</th><th>mission</th><th>year</th><th>author</th><th>exptime</th><th>target_name</th><th>distance</th></tr></thead>
+<thead><tr><th></th><th></th><th></th><th></th><th>s</th><th></th><th>arcsec</th></tr></thead>
+<tbody><tr><td>0</td><td>TESS Sector 19</td><td>2019</td><td><a href="https://heasarc.gsfc.nasa.gov/docs/tess/pipeline.html">SPOC</a></td><td>120</td><td>303256075</td><td>0.0</td></tr>
+<tr><td>1</td><td>TESS Sector 60</td><td>2022</td><td><a href="https://heasarc.gsfc.nasa.gov/docs/tess/pipeline.html">SPOC</a></td><td>120</td><td>303256075</td><td>0.0</td></tr>
+</tbody></table>
+</div>
+</div>
+<div id="cell-35" class="cell" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>lc <span class="op">=</span> search[<span class="dv">0</span>].download().PDCSAP_FLUX.normalize().remove_nans()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>/Users/benpope/opt/anaconda3/envs/lk/lib/python3.10/site-packages/lightkurve/io/tess.py:33: ResourceWarning: unclosed file &lt;_io.BufferedReader name='/Users/benpope/.lightkurve-cache/mastDownload/TESS/tess2019331140908-s0019-0000000303256075-0164-s/tess2019331140908-s0019-0000000303256075-0164-s_lc.fits'&gt;
+  lc = read_generic_lightcurve(filename, flux_column=flux_column, time_format="btjd")
+/var/folders/vx/lm_q_1ld7c13_fbqfscs9n4w0000gq/T/ipykernel_99792/54457171.py:1: LightkurveDeprecationWarning: The PDCSAP_FLUX function is deprecated and may be removed in a future version.
+  lc = search[0].download().PDCSAP_FLUX.normalize().remove_nans()
+/Users/benpope/opt/anaconda3/envs/lk/lib/python3.10/site-packages/lightkurve/lightcurve.py:1138: LightkurveWarning: The light curve has a negative median flux (-2.23e+07 electron / s); `normalize()` will therefore divide by a negative number and invert the light curve, which is probablynot what you want
+  warnings.warn(</code></pre>
+</div>
+</div>
+<div id="cell-36" class="cell" data-execution_count="26">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>lc.plot()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="26">
+<pre><code>&lt;AxesSubplot:xlabel='Time - 2457000 [BTJD days]', ylabel='Normalized Flux'&gt;</code></pre>
+</div>
+</div>
+<p>This is a typical light curve for a Cepheid variable! If we want to determine its period, we can use the Lomb-Scargle periodogram.</p>
+<p>This is defined as:</p>
+<p><span class="math display">\[P(f) = \frac{1}{2\sigma^2} \left( \left( \sum_i y_i \cos(2\pi f t_i) \right)^2 + \left( \sum_i y_i \sin(2\pi f t_i) \right)^2 \right)\]</span></p>
+<p>where <span class="math inline">\(y_i\)</span> are the data points, <span class="math inline">\(t_i\)</span> are the times, and <span class="math inline">\(\sigma\)</span> is the standard deviation of the data.</p>
+<p>This is an estimator for the mod-squared Fourier transform suitable for unevenly sampled data. In practice, this is implemented as a linear regression problem with a design matrix that includes sine and cosine terms at a single frequency for all times, and a mean term (and indeed polynomial trends or instrumental systematics models).</p>
+<p>Design matrix <span class="math inline">\(X\)</span>:</p>
+<p><span class="math display">\[X = \begin{bmatrix} 1 &amp; \cos(2\pi f t_1) &amp; \sin(2\pi f t_1) \\ 1 &amp; \cos(2\pi f t_2) &amp; \sin(2\pi f t_2) \\ \vdots &amp; \vdots &amp; \vdots \\ 1 &amp; \cos(2\pi f t_N) &amp; \sin(2\pi f t_N) \end{bmatrix}\]</span></p>
+<p>We then solve this with least squares.</p>
+<div id="cell-40" class="cell" data-slideshow="{&quot;slide_type&quot;:&quot;slide&quot;}" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co"># lomb-scargle</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>ls <span class="op">=</span> LombScargle(lc.time, lc.flux, dy<span class="op">=</span>lc.flux_err)</span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>periods <span class="op">=</span> np.linspace(<span class="dv">1</span>, <span class="dv">10</span>, <span class="dv">1000</span>)<span class="op">*</span>u.day</span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>frequency <span class="op">=</span> <span class="dv">1</span><span class="op">/</span>periods</span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>power <span class="op">=</span> ls.power(<span class="dv">1</span><span class="op">/</span>periods)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-41" class="cell" data-slideshow="{&quot;slide_type&quot;:&quot;slide&quot;}" data-execution_count="28">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>plt.plot(periods, power)</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Period [days]'</span>)</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Power'</span>)</span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>plt.xlim(periods.<span class="bu">min</span>().value, periods.<span class="bu">max</span>().value)</span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>plt.axvline(periods[np.argmax(power)].value, color<span class="op">=</span><span class="st">'red'</span>, linestyle<span class="op">=</span><span class="st">'dashed'</span>)</span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>plt.text(periods[np.argmax(power)].value<span class="op">+</span><span class="fl">0.1</span>, np.<span class="bu">max</span>(power), <span class="ss">f'Best period: </span><span class="sc">{</span>periods[np.argmax(power)]<span class="sc">.</span>value<span class="sc">:.4g}</span><span class="ss"> d'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="28">
+<pre><code>Text(4.063963963963964, 0.9593880168051868, 'Best period: 3.964 d')</code></pre>
+</div>
+</div>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
